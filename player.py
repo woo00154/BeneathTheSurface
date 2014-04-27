@@ -70,7 +70,7 @@ class Player(Person):
         self.run_limit = 4
         self.sprint_limit = 8
         self.fall_time = 0
-        self.fall_limit = 30
+        self.fall_limit = 20
         self.wall_slide_limit = 25
         self.wall_slide_time = 0
         
@@ -225,7 +225,7 @@ class Player(Person):
             self.fall_time-=1
         elif self.onGround:
             self.status['health'].current -= int(self.fall_time/self.fall_limit) * 20
-            print(self.fall_time)
+            
         if self.yvel <= 0:
             self.fall_time = 0
 

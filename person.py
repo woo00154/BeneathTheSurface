@@ -18,8 +18,8 @@ class Person(Image):
     def load_images(self):
         pass
     
-    def out_of_screen(self,screen):
-        x,y = screen.get_size()
+    def out_of_screen(self,map_size):
+        x,y = map_size
         return self.rect.x > x or self.rect.y > y
             
     
@@ -66,7 +66,9 @@ class Person(Image):
                 
                 
                 if xvel > 0:
-                    
+                    if p.type == (3,0):
+                        self.rect.bottom = p.rect.bottom + self.rect.left - p.rect.left
+                    else:
                         self.rect.right = p.rect.left
                         self.xvel = 0
                         
@@ -76,7 +78,9 @@ class Person(Image):
                             self.yvel = 0
                             self.hanging = True
                 if xvel < 0:
-
+                    if p.type == (3,0):
+                        self.rect.bottom = p.rect.bottom + self.rect.left - p.rect.left
+                    else:
                         self.rect.left = p.rect.right
                         self.onWall_L = True
                         self.xvel = 0

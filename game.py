@@ -28,7 +28,7 @@ class Game(Mode):
         self.stage = Stage(self.game_dimension)
         self.stage.load_stage('Intro')
         self.map = self.stage.rooms[0]
-        self.shade = Shade(200,screen)
+        self.shade = Shade(50,screen)
         
         
         self.fade = Fade(screen,'in',3)
@@ -65,10 +65,12 @@ class Game(Mode):
             if self.fade.loop():
                 if self.next_before != 0:
                     self.next_stage()
-            
+                    
         else:
-            if self.player.out_of_screen(self.fade.surface):
+            if self.player.out_of_screen(self.map.map_size):
                 self.player.status['health'].current = 0
+                
+
             
             self.player.interacting = False
             

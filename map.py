@@ -18,6 +18,7 @@ class Map():
         self.next_stage = None
         self.dimension = dimension
         self.camera = Camera(*self.dimension)
+        self.map_size = dimension
         
         
     def load_map(self,folder,name):
@@ -30,6 +31,8 @@ class Map():
         root = tree.getroot()
         self.camera.map_w = int(root.attrib['width'])
         self.camera.map_h = int(root.attrib['height'])
+        
+        self.map_size = (self.camera.map_w, self.camera.map_h)
         for r in root:
 
             for o in r:
@@ -46,7 +49,7 @@ class Map():
                         
                         self.entity.append(target)
                         
-                    if int(o.attrib['tx']) == 0:
+                    if int(o.attrib['ty']) == 0:
                         self.platforms.append(target)
                 
                 else:
