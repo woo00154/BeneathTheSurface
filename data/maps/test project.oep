@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <OgmoVersion>2.1.0.6</OgmoVersion>
+  <Name>test</Name>
+  <BackgroundColor A="255" R="255" G="255" B="255" />
+  <GridColor A="255" R="0" G="0" B="0" />
+  <LevelDefaultSize>
+    <Width>1600</Width>
+    <Height>600</Height>
+  </LevelDefaultSize>
+  <LevelMinimumSize>
+    <Width>800</Width>
+    <Height>600</Height>
+  </LevelMinimumSize>
+  <LevelMaximumSize>
+    <Width>10000000</Width>
+    <Height>10000000</Height>
+  </LevelMaximumSize>
+  <Filename>C:\Users\Will\Documents\GitHub\Parkour\data\maps\test project.oep</Filename>
+  <AngleMode>Radians</AngleMode>
+  <CameraEnabled>false</CameraEnabled>
+  <CameraSize>
+    <Width>640</Width>
+    <Height>480</Height>
+  </CameraSize>
+  <ExportCameraPosition>false</ExportCameraPosition>
+  <LevelValueDefinitions />
+  <LayerDefinitions>
+    <LayerDefinition xsi:type="TileLayerDefinition">
+      <Name>Platforms</Name>
+      <Grid>
+        <Width>25</Width>
+        <Height>25</Height>
+      </Grid>
+      <ScrollFactor>
+        <X>1</X>
+        <Y>1</Y>
+      </ScrollFactor>
+      <ExportMode>XMLCoords</ExportMode>
+    </LayerDefinition>
+    <LayerDefinition xsi:type="EntityLayerDefinition">
+      <Name>Entities</Name>
+      <Grid>
+        <Width>25</Width>
+        <Height>25</Height>
+      </Grid>
+      <ScrollFactor>
+        <X>1</X>
+        <Y>1</Y>
+      </ScrollFactor>
+    </LayerDefinition>
+  </LayerDefinitions>
+  <Tilesets>
+    <Tileset>
+      <Name>Black Tile</Name>
+      <FilePath>Black Tile.png</FilePath>
+      <TileSize>
+        <Width>16</Width>
+        <Height>16</Height>
+      </TileSize>
+      <TileSep>0</TileSep>
+    </Tileset>
+    <Tileset>
+      <Name>Tileset</Name>
+      <FilePath>Tileset.png</FilePath>
+      <TileSize>
+        <Width>25</Width>
+        <Height>25</Height>
+      </TileSize>
+      <TileSep>0</TileSep>
+    </Tileset>
+  </Tilesets>
+  <EntityDefinitions>
+    <EntityDefinition Name="Cabinet" Limit="-1" ResizableX="false" ResizableY="false" Rotatable="false" RotateIncrement="15">
+      <Size>
+        <Width>75</Width>
+        <Height>100</Height>
+      </Size>
+      <Origin>
+        <X>0</X>
+        <Y>0</Y>
+      </Origin>
+      <ImageDefinition DrawMode="Image" ImagePath="Cabinet.png" Tiled="false">
+        <RectColor A="255" R="255" G="0" B="0" />
+      </ImageDefinition>
+      <ValueDefinitions />
+      <NodesDefinition Enabled="false" Limit="-1" DrawMode="None" Ghost="false" />
+    </EntityDefinition>
+    <EntityDefinition Name="Closet" Limit="-1" ResizableX="false" ResizableY="false" Rotatable="false" RotateIncrement="15">
+      <Size>
+        <Width>150</Width>
+        <Height>200</Height>
+      </Size>
+      <Origin>
+        <X>0</X>
+        <Y>0</Y>
+      </Origin>
+      <ImageDefinition DrawMode="Image" ImagePath="Closet.png" Tiled="false">
+        <RectColor A="255" R="255" G="0" B="0" />
+      </ImageDefinition>
+      <ValueDefinitions />
+      <NodesDefinition Enabled="false" Limit="-1" DrawMode="None" Ghost="false" />
+    </EntityDefinition>
+    <EntityDefinition Name="Bed" Limit="-1" ResizableX="false" ResizableY="false" Rotatable="false" RotateIncrement="15">
+      <Size>
+        <Width>200</Width>
+        <Height>100</Height>
+      </Size>
+      <Origin>
+        <X>0</X>
+        <Y>0</Y>
+      </Origin>
+      <ImageDefinition DrawMode="Image" ImagePath="Bed.png" Tiled="false">
+        <RectColor A="255" R="255" G="0" B="0" />
+      </ImageDefinition>
+      <ValueDefinitions />
+      <NodesDefinition Enabled="false" Limit="-1" DrawMode="None" Ghost="false" />
+    </EntityDefinition>
+    <EntityDefinition Name="Door" Limit="-1" ResizableX="false" ResizableY="false" Rotatable="false" RotateIncrement="15">
+      <Size>
+        <Width>25</Width>
+        <Height>200</Height>
+      </Size>
+      <Origin>
+        <X>0</X>
+        <Y>0</Y>
+      </Origin>
+      <ImageDefinition DrawMode="Image" ImagePath="Door.png" Tiled="false">
+        <RectColor A="255" R="255" G="0" B="0" />
+      </ImageDefinition>
+      <ValueDefinitions />
+      <NodesDefinition Enabled="false" Limit="-1" DrawMode="None" Ghost="false" />
+    </EntityDefinition>
+  </EntityDefinitions>
+</project>
