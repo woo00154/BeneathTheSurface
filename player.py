@@ -15,13 +15,17 @@ class Player(Person):
         self.add_parkour()
         self.add_stats(entity)
         self.state = 'idle'
-        self.stage = 1
+        self.stage = 0
         self.next_stage = False
         self.direc = 1 #right
         #self.add_animation()
         
     def add_animation(self):    
         self.motion = 'default'
+        
+    def set_spawn(self,x,y):
+        self.spawn_x = x
+        self.spawn_y = y
     
     
     def add_basic_movement(self):
@@ -36,6 +40,12 @@ class Player(Person):
     def add_parkour(self):
         self.parkour = True
         self.hanging = self.onWall_R = self.onWall_L = self.climb = False
+        
+    def place(self,entity):
+        Person.reset(self,entity)
+        
+    def stamina_reset(self):
+        self.status['stamina'].reset()
     
     def reset(self,entity):
         Person.reset(self,entity)
@@ -149,7 +159,7 @@ class Player(Person):
                 return
             self.jumping = True
             #wall jump
-            if self.get_button('jump'):
+            if self.get_button('jump') and not self.onGround:
                 if self.status['stamina'].cost(20):
                     if self.onWall_R and self.get_button('right') and not self.get_button('left'):
                         self.yvel = -15

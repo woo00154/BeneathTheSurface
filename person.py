@@ -51,15 +51,14 @@ class Person(Image):
     
     def collide(self, xvel, yvel, platforms):
         
+    
+        
         for p in platforms:
             if pygame.sprite.collide_rect(self, p):
-                if p.type == (6,1):
-                    self.next_stage = True
+                
                 
                 if xvel > 0:
-                    if p.type == (3,0):
-                        self.rect.bottom = p.rect.bottom + self.rect.left - p.rect.left
-                    else:
+                    
                         self.rect.right = p.rect.left
                         self.xvel = 0
                         
@@ -69,9 +68,7 @@ class Person(Image):
                             self.yvel = 0
                             self.hanging = True
                 if xvel < 0:
-                    if p.type == (3,0):
-                        self.rect.bottom = p.rect.bottom + self.rect.right - p.rect.right
-                    else:
+
                         self.rect.left = p.rect.right
                         self.onWall_L = True
                         self.xvel = 0

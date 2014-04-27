@@ -14,8 +14,11 @@ class Game(Mode):
         Mode.__init__(self,screen)
         #create a loading screen
         Loading(screen)
-        #now do all the intial stuff
+        self.loading = True
+        
+        #border color
         self.surface.fill((0,0,0))
+        
         screen.blit(self.surface,(0,0))
         #create border at top and bottom
         game_dimension = (screen.get_size()[0],screen.get_size()[1]*0.75)
@@ -25,7 +28,7 @@ class Game(Mode):
         self.stage = Stage(game_dimension)
         self.stage.load_stage('Intro')
         self.map = self.stage.rooms[0]
-        
+        self.shade = Shade(200,screen)
         
         
         self.fade = Fade(screen,'in',3)
@@ -34,11 +37,21 @@ class Game(Mode):
         
         self.map.entity.append(self.player)
         
-        
+        #test
+        self.loading = False
     
     
     def next_stage(self):
-        self.fade.mode = 'in'
+        self.fade.switch_mode()
+        while self.fade.loop():
+            print(1)
+        
+        if self.fade.done:
+            self.fade.switch_mode()
+            self.player.stage += 1
+            self.map = self.stage.rooms[self.player.stage]
+            self.player.set_spawn(self.map.spawn_x,self.map.spawn_y)
+            self.player.place(self.map.entity)
         
             
     
@@ -46,6 +59,11 @@ class Game(Mode):
         self.player.inputhandler.button_list[button] = state
         
     def tick(self,events):
+        
+        if pygame.sprite.collide_rect(self.player, self.map.next_stage):
+            self.next_stage()
+        
+        
         
         for e in self.map.entity:
             if e.dead:
@@ -101,7 +119,7 @@ class Game(Mode):
             elif self.player.admin:
                 self.player.admin_tick()
                 
-        print(self.player.next_stage)
+        
 
             
 
@@ -132,5 +150,8 @@ class Game(Mode):
             s.render(screen)
     #fade in/out    
     def layer_4(self,screen):
-        screen.blit(screen,(0,0))
+        screen.blit(self.fade.surface,(0,0))
+        
+    def layer_5(self,screen):
+        screen.blit(self.shade.surface,(0,0))
     
