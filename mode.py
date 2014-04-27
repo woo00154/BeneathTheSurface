@@ -5,9 +5,10 @@ class Mode:
     def __init__(self,screen):
         #basic menu surface
         self.surface = pygame.Surface(screen.get_size())    
-    
+        self.loading = False
     def loop(self,events,screen):
         #basic loop with update and draw
+        
         mode = self.tick(events)
         self.render(screen)
         #if mode is not str(self), the game_mode will switch

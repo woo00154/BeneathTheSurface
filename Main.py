@@ -17,6 +17,7 @@ class Main:
         self.surface = pygame.Surface(self.screen.get_size())
         pygame.display.set_caption('Parkour Simulator')
         
+        
         #background surface setting
         bg = pygame.Surface(resolution)
         bg.convert()

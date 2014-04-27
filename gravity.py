@@ -4,7 +4,7 @@ class Gravity:
     
     def __init__(self,magnitude = 9.8):
         self.magnitude = magnitude
-        self.limit = 15
+        self.limit = 12
         
     def set_mag(self,mag):
         self.magnitude = mag

@@ -15,6 +15,7 @@ class Map():
         self.objects = []
         self.entity = []
         self.people = []
+        self.next_stage = None
         self.dimension = dimension
         self.camera = Camera(*self.dimension)
         
@@ -38,11 +39,15 @@ class Map():
                     if int(o.attrib['tx']) == 7 and int(o.attrib['ty']) == 1:
                         self.spawn_x = int(o.attrib['x']) * size
                         self.spawn_y = int(o.attrib['y']) * size
+                        
                     elif int(o.attrib['tx']) == 6 and int(o.attrib['ty']) == 1:
-                        pass
+                        self.next_stage = target
                     else:
-                        self.platforms.append(target)
+                        
                         self.entity.append(target)
+                        
+                    if int(o.attrib['tx']) == 0:
+                        self.platforms.append(target)
                 
                 else:
                     

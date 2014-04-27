@@ -18,11 +18,19 @@ class Person(Image):
     def load_images(self):
         pass
     
+    def out_of_screen(self,screen):
+        x,y = screen.get_size()
+        return self.rect.x > x or self.rect.y > y
+            
+    
     def reset(self,entity):
         if self in entity:
             entity.remove(self)
         entity.append(self)
         self.set_pos(self.spawn_x,self.spawn_y)
+        self.acc = 1
+        self.xvel = 0
+        self.yvel = 0
     
     def set_pos(self,x,y):
         self.rect.left = x

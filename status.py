@@ -18,8 +18,8 @@ class Status(Image):
         self.symbol = load_image(image + '.png',folder = 'status')[0]
         #self.status_bar_rect = self.box.get_rect()
       
-        self.current = 20
-        self.maximum = 20
+        self.current = 40
+        self.maximum = 40
 
     def low(self):
         return self.current <= self.max * 0.2
@@ -44,6 +44,9 @@ class Status(Image):
     def set(self,value):
         self.current = value
         
+    def upgrade(self):
+        self.maximum += 20    
+    
 class Stamina(Status):
     
     def __init__(self):

@@ -19,19 +19,28 @@ class Fade:
             
         self.surface.set_alpha(self.fade)
         
-    
+    def switch_mode(self):
+        self.speed = -self.speed
+        if self.mode == 'in':
+            self.mode = 'out'        
+        elif self.mode == 'out':
+            self.mode = 'in'
+        else:
+            raise Exception
+        self.done = False
+        
+            
 
     
     def loop(self):
-        if (self.mode == 'in' and self.fade == 255) or (self.mode == 'out' and self.fade == 0):
-            self.done = True
+
         if not self.done:
-            if 0 < self.fade < 255:
+            if 0 <= self.fade <= 255:
                 self.fade += self.speed
-            elif self.fade < 100:
+            elif self.fade < 0:
                 self.fade = 0
                 self.done = True
-            elif self.fade >= 100:
+            elif self.fade > 255:
                 self.fade = 255
                 self.done = True
             self.surface.set_alpha(self.fade)

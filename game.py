@@ -21,11 +21,11 @@ class Game(Mode):
         
         screen.blit(self.surface,(0,0))
         #create border at top and bottom
-        game_dimension = (screen.get_size()[0],screen.get_size()[1]*0.75)
-        self.game_surface = pygame.Surface(game_dimension)
+        self.game_dimension = (screen.get_size()[0],screen.get_size()[1]*0.75)
+        self.game_surface = pygame.Surface(self.game_dimension)
         
         #MUST BE FIXED
-        self.stage = Stage(game_dimension)
+        self.stage = Stage(self.game_dimension)
         self.stage.load_stage('Intro')
         self.map = self.stage.rooms[0]
         self.shade = Shade(200,screen)
@@ -39,20 +39,21 @@ class Game(Mode):
         
         #test
         self.loading = False
+        self.next_before = True
     
+    def exit_stage(self):
+        self.loading = True
+        self.fade.switch_mode()
     
     def next_stage(self):
-        self.fade.switch_mode()
-        while self.fade.loop():
-            print(1)
-        
+
         if self.fade.done:
             self.fade.switch_mode()
-            self.player.stage += 1
+            self.player.stage += self.next_before
             self.map = self.stage.rooms[self.player.stage]
             self.player.set_spawn(self.map.spawn_x,self.map.spawn_y)
             self.player.place(self.map.entity)
-        
+            self.loading = False
             
     
     def set_button(self,button,state):
@@ -60,64 +61,85 @@ class Game(Mode):
         
     def tick(self,events):
         
-        if pygame.sprite.collide_rect(self.player, self.map.next_stage):
-            self.next_stage()
-        
-        
-        
-        for e in self.map.entity:
-            if e.dead:
-                self.map.entity.remove(e)
-        for e in events:
-            if e.type == KEYDOWN:
-                if e.key == K_RIGHT:
-                    self.set_button('right',True)
-                if e.key == K_LEFT:
-                    self.set_button('left',True)
-                if e.key == K_UP:
-                    self.set_button('up',True)
-                    self.player.jumping = True
-                if e.key == K_LSHIFT:
-                    self.set_button('sprint',True)
-                if e.key == K_DOWN:
-                    self.set_button('down',True)
-                if e.key == K_z:
-                    self.set_button('jump',True)    
-                if e.key == K_x:
-                    self.set_button('low_jump',True)
-                if e.key == K_r:
-                    self.player.reset(self.map.entity)
-                if e.key == K_t:
-                    self.player.admin = not self.player.admin
-                if e.key == K_TAB:
-                    self.player.running = not self.player.running
-                
-                if e.key == K_ESCAPE:
-                    return 'Menu'
-
-            elif e.type == KEYUP:
-                if e.key == K_RIGHT:
-                    self.set_button('right',False)
-                if e.key == K_LEFT:
-                    self.set_button('left',False)
-                if e.key == K_LSHIFT:
-                    self.set_button('sprint',False)
-                if e.key == K_UP:
-                    self.set_button('up',False)
-                if e.key == K_DOWN:
-                    self.set_button('down',False)
-                if e.key == K_z:
-                    self.set_button('jump',False)    
-            elif e.type == QUIT:
-                pygame.display.quit()
-                sys.exit()
-        self.fade.loop()
-        self.map.camera.update(self.player)
-        if not self.player.dead:
-            if not self.player.admin:
-                self.player.tick(self.map.platforms,self.map.entity)
-            elif self.player.admin:
-                self.player.admin_tick()
+        if self.loading:
+            if self.fade.loop():
+                if self.next_before != 0:
+                    self.next_stage()
+            
+        else:
+            if self.player.out_of_screen(self.fade.surface):
+                self.player.status['health'].current = 0
+            
+            self.player.interacting = False
+            
+            for e in self.map.entity:
+                if e.dead:
+                    self.map.entity.remove(e)
+            for e in events:
+                if e.type == KEYDOWN:
+                    if e.key == K_RIGHT:
+                        self.set_button('right',True)
+                    if e.key == K_LEFT:
+                        self.set_button('left',True)
+                    if e.key == K_UP:
+                        self.set_button('up',True)
+                        self.player.jumping = True
+                    if e.key == K_LSHIFT:
+                        self.set_button('sprint',True)
+                    if e.key == K_DOWN:
+                        self.set_button('down',True)
+                    if e.key == K_z:
+                        self.set_button('jump',True)    
+                    if e.key == K_x:
+                        self.set_button('low_jump',True)
+                    if e.key == K_r:
+                        self.player.reset(self.map.entity)
+                    if e.key == K_t:
+                        self.player.admin = not self.player.admin
+                    if e.key == K_TAB:
+                        self.player.running = not self.player.running
+                    if e.key == K_RETURN:
+                        self.player.interacting = True
+                    
+                    if e.key == K_RIGHTBRACKET:
+                        self.next_before = 1
+                        self.exit_stage()
+                        
+                        
+                    if e.key == K_LEFTBRACKET:
+                        self.next_before = -1
+                        self.exit_stage()
+                    
+                    if e.key == K_ESCAPE:
+                        return 'Menu'
+    
+                elif e.type == KEYUP:
+                    if e.key == K_RIGHT:
+                        self.set_button('right',False)
+                    if e.key == K_LEFT:
+                        self.set_button('left',False)
+                    if e.key == K_LSHIFT:
+                        self.set_button('sprint',False)
+                    if e.key == K_UP:
+                        self.set_button('up',False)
+                    if e.key == K_DOWN:
+                        self.set_button('down',False)
+                    if e.key == K_z:
+                        self.set_button('jump',False)    
+                elif e.type == QUIT:
+                    pygame.display.quit()
+                    sys.exit()
+                    
+            if pygame.sprite.collide_rect(self.player, self.map.next_stage) and not self.loading and self.player.interacting:
+                self.exit_stage()   
+                     
+            self.fade.loop()
+            self.map.camera.update(self.player)
+            if not self.player.dead:
+                if not self.player.admin:
+                    self.player.tick(self.map.platforms,self.map.entity)
+                elif self.player.admin:
+                    self.player.admin_tick()
                 
         
 
@@ -130,6 +152,7 @@ class Game(Mode):
         self.layer_2(screen)
         self.layer_3(screen)
         self.layer_4(screen)
+        self.layer_5(screen)
     
     def __str__(self):
         return 'Game'
@@ -153,5 +176,5 @@ class Game(Mode):
         screen.blit(self.fade.surface,(0,0))
         
     def layer_5(self,screen):
-        screen.blit(self.shade.surface,(0,0))
+        screen.blit(self.shade.surface,(0,(self.shade.surface.get_size()[1] - self.game_dimension[1])//2))
     

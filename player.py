@@ -6,6 +6,7 @@ from status import *
  
 class Player(Person):
     
+
     def __init__(self,spawn_x=100,spawn_y=100,entity = []):
         Person.__init__(self,spawn_x,spawn_y,'0.png', 'player\\default')
         self.inputhandler = InputHandler()
@@ -26,7 +27,11 @@ class Player(Person):
     def set_spawn(self,x,y):
         self.spawn_x = x
         self.spawn_y = y
-    
+
+    def reset_basic_movement(self):
+        self.inputhandler = InputHandler()
+        self.add_basic_movement()
+        
     
     def add_basic_movement(self):
         self.jumping = self.onGround = self.running = False
@@ -43,6 +48,7 @@ class Player(Person):
         
     def place(self,entity):
         Person.reset(self,entity)
+        self.reset_basic_movement()
         
     def stamina_reset(self):
         self.status['stamina'].reset()
@@ -64,7 +70,7 @@ class Player(Person):
         self.run_limit = 4
         self.sprint_limit = 8
         self.fall_time = 0
-        self.fall_limit = 20
+        self.fall_limit = 30
         self.wall_slide_limit = 25
         self.wall_slide_time = 0
         
@@ -129,6 +135,7 @@ class Player(Person):
                     self.xvel /= 2
                     if -1< self.xvel < 1:
                         self.xvel = 0
+
                 #allows a player to run
             
             if self.get_button('sprint'):
@@ -218,6 +225,7 @@ class Player(Person):
             self.fall_time-=1
         elif self.onGround:
             self.status['health'].current -= int(self.fall_time/self.fall_limit) * 20
+            print(self.fall_time)
         if self.yvel <= 0:
             self.fall_time = 0
 
