@@ -30,7 +30,7 @@ def load_sound(name):
         raise(SystemExit, message)
     return sound
 
-def load_tileset(width,height,tx,ty):
+def load_tileset(width,height,tx,ty,colorkey = None):
     fullname = os.path.join('data','maps','Tileset.png')
     try:
         image = pygame.image.load(fullname)
@@ -38,6 +38,11 @@ def load_tileset(width,height,tx,ty):
         print("Cannot load tileset.")
         raise SystemExit
     image = image.convert()
+    if colorkey is not None:
+        if colorkey is -1:
+            colorkey = image.get_at((0,0))
+        image.set_colorkey(colorkey, RLEACCEL)
+    
     rect = (tx*width,ty*height,width,height)
     return image.subsurface(rect)
 

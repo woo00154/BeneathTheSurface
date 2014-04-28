@@ -3,6 +3,7 @@ from person import Person
 from img_n_sound import * 
 from inputhandler import InputHandler
 from status import *
+
  
 class Player(Person):
     
@@ -13,11 +14,15 @@ class Player(Person):
         self.admin = self.physics = self.parkour = False
         self.add_basic_movement()
         self.add_physics()
-        self.add_parkour()
+#         self.add_parkour()
         self.add_stats(entity)
         self.state = 'idle'
         self.stage = 0
         self.next_stage = False
+        self.brightness = 50
+        self.stamina_regen = False
+        
+        
         self.direc = 1 #right
         #self.add_animation()
         
@@ -91,7 +96,7 @@ class Player(Person):
         self.status.update({'stamina':Stamina()})
 
         #money
-        self.money = 0
+        self.status.update({'money':Money()})
         #danger
         self.danger = 0
 
@@ -190,9 +195,11 @@ class Player(Person):
         if self.status['health'].current <= 0:
             self.dead = True
             
-
-        self.onWall = self.onWall_L or self.onWall_R
-        #make sure the charater has the control at certain point
+        if self.parkour:
+            self.onWall = self.onWall_L or self.onWall_R
+        else:
+            self.onWall = self.hanging = self.climb =  False
+            #make sure the charater has the control at certain point
         if not self.jumping or self.onWall or self.hanging or self.climb:
             self.control = True
         else:
@@ -204,7 +211,8 @@ class Player(Person):
         #apply gravity
         self.gravity.apply(self)
         #all wall-related movements
-        self.wall_movement()
+        if self.parkour:
+            self.wall_movement()
         
         #all the y-component movements    
         if self.onGround:
@@ -212,7 +220,7 @@ class Player(Person):
     
         if self.get_button('jump') and self.onGround:
             if self.status['stamina'].cost(20):
-                self.yvel = -15
+                self.yvel = -15 + self.stage
                 self.set_button('jump',False)
                 self.jumping = True
          

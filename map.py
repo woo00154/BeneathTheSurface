@@ -16,9 +16,11 @@ class Map():
         self.entity = []
         self.people = []
         self.next_stage = None
+        self.previous_stage = None
         self.dimension = dimension
         self.camera = Camera(*self.dimension)
         self.map_size = dimension
+        self.interactables = []
         
         
     def load_map(self,folder,name):
@@ -39,18 +41,23 @@ class Map():
                 if o.tag == 'tile':
                     size = 25
                     target = Platform(int(o.attrib['x'])*size,int(o.attrib['y'])*size,int(o.attrib['tx']),int(o.attrib['ty']),size)
-                    if int(o.attrib['tx']) == 7 and int(o.attrib['ty']) == 1:
+                    if int(o.attrib['ty']) == 0:
+                        self.platforms.append(target)
+                    elif int(o.attrib['tx']) == 7 and int(o.attrib['ty']) == 1:
                         self.spawn_x = int(o.attrib['x']) * size
                         self.spawn_y = int(o.attrib['y']) * size
                         
+                    elif int(o.attrib['tx']) == 4 and int(o.attrib['ty']) == 1:
+                        self.interactables.append(target)
+                    elif int(o.attrib['tx']) == 5 and int(o.attrib['ty']) == 1:
+                        self.previous_stage = target
                     elif int(o.attrib['tx']) == 6 and int(o.attrib['ty']) == 1:
                         self.next_stage = target
                     else:
                         
                         self.entity.append(target)
                         
-                    if int(o.attrib['ty']) == 0:
-                        self.platforms.append(target)
+                    
                 
                 else:
                     

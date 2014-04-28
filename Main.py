@@ -3,6 +3,7 @@ from pygame.locals import *
 from menu import Menu 
 from img_n_sound import *
 from game import Game
+from shop import Shop
 #must import this to not make error for cx_Freeze. Reason unknown
 import re
 class Main:
@@ -17,6 +18,7 @@ class Main:
         self.surface = pygame.Surface(self.screen.get_size())
         pygame.display.set_caption('Parkour Simulator')
         
+        self.save = None
         
         #background surface setting
         bg = pygame.Surface(resolution)
@@ -39,15 +41,25 @@ class Main:
 
     def main_loop(self):
         
+        
         while 1:
             #set fps
             self.clock.tick(60)
             #if the desired mode is changed, then change the program to that mode.
             if self.selected_mode != str(self.current_mode):                
-                if self.selected_mode == 'Start':
-                    self.current_mode = Game(self.screen)
+                if self.selected_mode == 'Start' or self.selected_mode == 'Continue':
+                    if self.save == None:
+                        self.save = Game(self.screen)
+                    self.current_mode = self.save
                 elif self.selected_mode == 'Menu':
-                    self.current_mode = Menu(['Start','Quit'],self.screen)
+                    if self.save == None:
+                        self.current_mode = Menu(['Start','Quit'],self.screen)
+                    else:
+                        self.current_mode = Menu(['Continue','Quit'],self.screen)
+                elif self.selected_mode == 'Shop':
+                    temp = Shop(self.screen,self.save.player)
+                    self.current_mode = temp
+                    self.save.player = temp.player
 
                 elif self.selected_mode == 'Quit':
                     raise SystemExit

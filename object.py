@@ -8,6 +8,7 @@ class Object(pygame.sprite.Sprite):
         self.rect = Rect(x,y,*self.image.get_size())
         self.interact = False
         self.message = "..."
+        self.dead = False
     
     def interacted(self,interact):
         if not self.interact and interact:

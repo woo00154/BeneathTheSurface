@@ -79,7 +79,7 @@ class Person(Image):
                             self.hanging = True
                 if xvel < 0:
                     if p.type == (3,0):
-                        self.rect.bottom = p.rect.bottom + self.rect.left - p.rect.left
+                        self.rect.bottom = p.rect.top
                     else:
                         self.rect.left = p.rect.right
                         self.onWall_L = True

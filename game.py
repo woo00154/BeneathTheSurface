@@ -28,7 +28,11 @@ class Game(Mode):
         self.stage = Stage(self.game_dimension)
         self.stage.load_stage('Intro')
         self.map = self.stage.rooms[0]
-        self.shade = Shade(50,screen)
+        
+
+        #133442__klankbeeld__horror-ambience-11.wav
+        pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=4096)
+        
         
         
         self.fade = Fade(screen,'in',3)
@@ -36,7 +40,7 @@ class Game(Mode):
         self.player = Player(self.map.spawn_x,self.map.spawn_y,self.map.entity)
         
         self.map.entity.append(self.player)
-        
+        self.shade = Shade(self.player,0,self.fade.surface)
         #test
         self.loading = False
         self.next_before = True
@@ -54,6 +58,22 @@ class Game(Mode):
             self.player.set_spawn(self.map.spawn_x,self.map.spawn_y)
             self.player.place(self.map.entity)
             self.loading = False
+            
+            if self.player.stamina_regen:
+                self.player.stamina_reset()
+            
+#             if self.player.stage > 0:
+#                 self.shade = Shade(self.player,self.player.stage,self.fade.surface)
+#             else:
+#                 self.shade = Shade(self.player,0,self.fade.surface)
+#
+            if self.player.stage == 0:
+                self.bgm.stop()
+                #self.bgm.fadeout(1000)
+            if self.player.stage == 1:
+                self.bgm = pygame.mixer.Sound(os.path.join('data','music',"wind.wav"))
+                self.bgm.play(loops = -1,fade_ms = 10000)
+                
             
     
     def set_button(self,button,state):
@@ -132,8 +152,20 @@ class Game(Mode):
                     pygame.display.quit()
                     sys.exit()
                     
+            if self.map.previous_stage != None:
+                if pygame.sprite.collide_rect(self.player, self.map.previous_stage) and not self.loading and self.player.interacting:
+                    self.next_before = -1
+                    self.exit_stage()
+                    
             if pygame.sprite.collide_rect(self.player, self.map.next_stage) and not self.loading and self.player.interacting:
+                self.next_before = 1
                 self.exit_stage()   
+                     
+            for i in self.map.interactables:
+                if pygame.sprite.collide_rect(self.player, i) and self.player.interacting and not self.loading:
+                    self.interacting = False
+                    return 'Shop'
+                    
                      
             self.fade.loop()
             self.map.camera.update(self.player)
@@ -178,5 +210,7 @@ class Game(Mode):
         screen.blit(self.fade.surface,(0,0))
         
     def layer_5(self,screen):
+        self.shade = Shade(self.player, self.player.stage * self.player.brightness,screen)
+        #self.shade.loop(self.player)
         screen.blit(self.shade.surface,(0,(self.shade.surface.get_size()[1] - self.game_dimension[1])//2))
     

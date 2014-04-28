@@ -1,10 +1,11 @@
 from image import Image
 import pygame
 from img_n_sound import *
+from button import Button
 
 class Status(Image):
     
-    def __init__(self,image,color,y):
+    def __init__(self,image,color,x = 40,y=10):
         #Image.__init__(self,40,y,'status_bar.png',folder = 'status')
         self.value = pygame.Surface((30,25))
         self.value.fill(color)
@@ -20,6 +21,7 @@ class Status(Image):
       
         self.current = 40
         self.maximum = 40
+        self.true_maximum = 100
 
     def low(self):
         return self.current <= self.max * 0.2
@@ -50,12 +52,13 @@ class Status(Image):
 class Stamina(Status):
     
     def __init__(self):
-        Status.__init__(self,'stamina',(100,149,247),45)
+        Status.__init__(self,'stamina',(100,149,247),y=45)
         self.state = True
         self.recharge_speed = 1
         
         self.current = 80
         self.maximum = 80
+        self.true_maximum = 200
         
     def update(self):
         Status.update(self)
@@ -87,6 +90,32 @@ class Stamina(Status):
 class Health(Status):
     
     def __init__(self):
-        Status.__init__(self,'health',(124,252,0),10)
+        Status.__init__(self,'health',(124,252,0),y = 10)
         
-
+class Money:
+    
+    def __init__(self):
+        self.current = 0
+        self.display = Button('Money: ' + str(self.current),35)
+    def gain(self,amount):
+        self.current += amount
+        return self.current
+    
+    def lose(self,amount):
+        self.current -= amount
+        return self.current
+    
+    def can_buy(self,amount):
+        if self.current < amount:
+            return False
+        else:
+            return self.lose(amount)
+        
+    def update(self):
+        self.display = Button('Money: ' + str(self.current),35)
+        
+    def render(self,screen):
+        
+        screen.blit(self.display.selected,(600,20))
+        #screen.blit(self.image,(x,y))
+        
