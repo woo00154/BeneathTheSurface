@@ -1,7 +1,7 @@
 from image import Image
 import pygame
 from img_n_sound import *
-from button import Button
+
 
 class Status(Image):
     
@@ -96,7 +96,13 @@ class Money:
     
     def __init__(self):
         self.current = 0
-        self.display = Button('Money: ' + str(self.current),35)
+        self.surface = pygame.Surface((200,35))
+        self.font = pygame.font.Font('data/fonts/freesansbold.ttf',35)
+        self.name = self.font.render('Money: ' + str(self.current), 1, (100,100,100))
+        self.rect = self.name.get_rect()
+
+        self.surface.blit(self.name,self.rect)
+
     def gain(self,amount):
         self.current += amount
         return self.current
@@ -106,16 +112,16 @@ class Money:
         return self.current
     
     def can_buy(self,amount):
-        if self.current < amount:
-            return False
-        else:
-            return self.lose(amount)
+        return self.current > amount
         
     def update(self):
-        self.display = Button('Money: ' + str(self.current),35)
+        self.surface.fill((0,0,0))
+        self.name = self.font.render('Money: ' + str(self.current), 1, (100,100,100))
+        self.surface.blit(self.name,self.rect)
         
     def render(self,screen):
+
         
-        screen.blit(self.display.selected,(600,20))
+        screen.blit(self.surface,(600,20))
         #screen.blit(self.image,(x,y))
         

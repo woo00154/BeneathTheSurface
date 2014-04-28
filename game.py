@@ -54,7 +54,12 @@ class Game(Mode):
         if self.fade.done:
             self.fade.switch_mode()
             self.player.stage += self.next_before
+            
             self.map = self.stage.rooms[self.player.stage]
+            if self.player.stage == 5:
+                self.next_before = 0 
+                self.player.brightness = 0
+                return
             self.player.set_spawn(self.map.spawn_x,self.map.spawn_y)
             self.player.place(self.map.entity)
             self.loading = False
@@ -66,15 +71,29 @@ class Game(Mode):
 #                 self.shade = Shade(self.player,self.player.stage,self.fade.surface)
 #             else:
 #                 self.shade = Shade(self.player,0,self.fade.surface)
-#
+#        
+            self.bgm = pygame.mixer.Sound(os.path.join('data','music',"wind.wav"))
+            self.bgm2 = pygame.mixer.Sound(os.path.join('data','music',"horror_converted.ogg"))
+            self.bgm3 = pygame.mixer.Sound(os.path.join('data','music',"stomping.ogg"))
             if self.player.stage == 0:
                 self.bgm.stop()
+                self.bgm2.stop()
                 #self.bgm.fadeout(1000)
             if self.player.stage == 1:
-                self.bgm = pygame.mixer.Sound(os.path.join('data','music',"wind.wav"))
+                
                 self.bgm.play(loops = -1,fade_ms = 10000)
                 
-            
+            if self.player.stage == 3:
+                
+                self.bgm2.play(loops = -1,fade_ms = 10000)
+            if self.player.stage < 3:
+                self.bgm2.stop()
+                
+            if self.player.stage == 4:
+                self.bgm3.play(loops = -1, fade_ms = 5000)
+                
+            if self.player.stage < 4:
+                self.bgm3.stop()
     
     def set_button(self,button,state):
         self.player.inputhandler.button_list[button] = state
@@ -85,7 +104,10 @@ class Game(Mode):
             if self.fade.loop():
                 if self.next_before != 0:
                     self.next_stage()
-                    
+                for e in events:
+                    if e.type == KEYDOWN:
+                        if e.key == K_ESCAPE:
+                            sys.exit()
         else:
             if self.player.out_of_screen(self.map.map_size):
                 self.player.status['health'].current = 0
@@ -165,6 +187,14 @@ class Game(Mode):
                 if pygame.sprite.collide_rect(self.player, i) and self.player.interacting and not self.loading:
                     self.interacting = False
                     return 'Shop'
+                
+            for c in self.map.coins:
+                if pygame.sprite.collide_rect(self.player, c):
+                    self.map.coins[self.map.coins.index(c)].dead = True
+                    self.map.coins.remove(c)
+                    self.player.status['money'].gain(10)
+                    coin= pygame.mixer.Sound(os.path.join('data','music',"coin_flip.wav"))
+                    coin.play()
                     
                      
             self.fade.loop()

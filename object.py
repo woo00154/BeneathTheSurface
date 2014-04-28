@@ -4,7 +4,7 @@ from img_n_sound import *
 class Object(pygame.sprite.Sprite):
     def __init__(self, x, y, image,colorkey=-1,folder=None):
         pygame.sprite.Sprite.__init__(self)
-        self.image,self.rect = load_image(image,colorkey,folder)
+        self.image,self.rect = load_image(image,(255,255,255),folder)
         self.rect = Rect(x,y,*self.image.get_size())
         self.interact = False
         self.message = "..."

@@ -14,9 +14,9 @@ class Shop(Mode):
 
         buttons = OrderedDict()
 
-        buttons.update({'health upgrade':self.player.status['health'].maximum})
-        buttons.update({'stamina upgrade':self.player.status['stamina'].maximum})
-        buttons.update({'brightness upgrade':self.player.brightness})
+        buttons.update({'health upgrade':self.health_upgrade_cost(self.player.status['health'].maximum)})
+        buttons.update({'stamina upgrade':self.stamina_upgrade_cost(self.player.status['stamina'].maximum)})
+        buttons.update({'brightness upgrade':self.lighting_upgrade_cost(self.player.brightness)})
         buttons.update({'stamina regeneration': ''})
         buttons.update({'climbing upgrade':''})
         buttons.update({ 'Exit':''})
@@ -107,16 +107,19 @@ class Shop(Mode):
                     cost = 0
                     if s == 'health upgrade':
                         if self.health_upgrade_cost(self.player.status['health'].maximum) != -1:
-                            cost = self.health_upgrade_cost(self.player.status['health'].maximum)
-                            self.player.status['health'].maximum = self.health_upgrade(self.player.status['health'].maximum)
+                            if self.player.status['money'].can_buy(self.health_upgrade_cost(self.player.status['health'].maximum)):
+                                cost = self.health_upgrade_cost(self.player.status['health'].maximum)
+                                self.player.status['health'].maximum = self.health_upgrade(self.player.status['health'].maximum)
                     if s == 'stamina upgrade':
                         if self.stamina_upgrade_cost(self.player.status['stamina'].maximum) != -1:
-                            cost = self.stamina_upgrade_cost(self.player.status['stamina'].maximum)
-                            self.player.status['stamina'].maximum = self.stamina_upgrade(self.player.status['stamina'].maximum)
+                            if self.player.status['money'].can_buy(self.stamina_upgrade_cost(self.player.status['stamina'].maximum)):
+                                cost = self.stamina_upgrade_cost(self.player.status['stamina'].maximum)
+                                self.player.status['stamina'].maximum = self.stamina_upgrade(self.player.status['stamina'].maximum)
                     if s == 'lighting upgrade':
                         if self.lighting_upgrade_cost(self.player.brightness) != -1:
-                            cost = self.lighting_upgrade_cost(self.player.brightness)
-                            self.player.brightness = self.lighting_upgrade(self.player.brightness)
+                            if self.player.status['money'].can_buy(self.lighting_upgrade_cost(self.player.brightness)):
+                                cost = self.lighting_upgrade_cost(self.player.brightness)
+                                self.player.brightness = self.lighting_upgrade(self.player.brightness)
                     if s == 'stamina regeneration':
                         if self.stamina_regen_upgrade_cost(self.player.stamina_regen) != -1:
                             cost = self.stamina_regen_upgrade_cost(self.player.stamina_regen)
@@ -159,7 +162,7 @@ class Shop(Mode):
     def health_upgrade_cost(self,max_health):
         if max_health == 100:
             return -1
-        return max_health * 20
+        return max_health * 2
     
     def health_upgrade(self, max_health):
         return max_health + 20
@@ -167,7 +170,7 @@ class Shop(Mode):
     def stamina_upgrade_cost(self,max_stamina):
         if max_stamina == 200:
             return -1
-        return max_stamina * 10
+        return max_stamina
     
     def stamina_upgrade(self, max_stamina):
         return max_stamina + 20

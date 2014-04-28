@@ -16,7 +16,7 @@ class Main:
         self.screen = pygame.display.set_mode(resolution)
         #create main surface to draw everything on.
         self.surface = pygame.Surface(self.screen.get_size())
-        pygame.display.set_caption('Parkour Simulator')
+        pygame.display.set_caption('Deep Down Beneath Us')
         
         self.save = None
         

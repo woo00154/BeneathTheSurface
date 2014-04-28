@@ -1,0 +1,1 @@
+c:\python33\python.exe setup.py build

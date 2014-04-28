@@ -1,5 +1,7 @@
 <level width="800" height="600">
-  <background />
+  <background>
+    <message id="0" x="0" y="0" />
+  </background>
   <Platforms tileset="Tileset" exportMode="XMLCoords">
     <tile x="0" y="1" tx="0" ty="0" />
     <tile x="0" y="2" tx="0" ty="0" />

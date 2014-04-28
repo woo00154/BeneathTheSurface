@@ -21,6 +21,7 @@ class Map():
         self.camera = Camera(*self.dimension)
         self.map_size = dimension
         self.interactables = []
+        self.coins = []
         
         
     def load_map(self,folder,name):
@@ -53,6 +54,9 @@ class Map():
                         self.previous_stage = target
                     elif int(o.attrib['tx']) == 6 and int(o.attrib['ty']) == 1:
                         self.next_stage = target
+                    elif int(o.attrib['tx']) == 7 and int(o.attrib['ty']) == 2:
+                        self.coins.append(target)
+                        self.entity.append(target)
                     else:
                         
                         self.entity.append(target)

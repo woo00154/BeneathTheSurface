@@ -14,13 +14,15 @@ class Player(Person):
         self.admin = self.physics = self.parkour = False
         self.add_basic_movement()
         self.add_physics()
-#         self.add_parkour()
+        self.add_parkour()
         self.add_stats(entity)
         self.state = 'idle'
         self.stage = 0
         self.next_stage = False
         self.brightness = 50
-        self.stamina_regen = False
+        
+        #temporary
+        self.stamina_regen= True
         
         
         self.direc = 1 #right
